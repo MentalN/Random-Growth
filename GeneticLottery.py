@@ -6,14 +6,11 @@ import random
 
 
 class Producer:
-    growth = []
 
-#   genotype, or a list of phenotype switches.
-    geneticCode = []
-
-#   genetic lottery
     def __init__(self):
-        for i in range(9):
+        self.geneticCode = []
+        self.growth = []
+        for i in range(10):
             r = random.randint(0, 100)
             if r < 50:
                 self.geneticCode.append(True)
@@ -70,7 +67,7 @@ class Producer:
     def input(self, someNum):
         for i in range(len(self.phenotypes)):
             if self.geneticCode[i] is True:
-                self.phenotypes[i](someNum)
+                self.phenotypes[i](self, someNum)
             else:
                 continue
 
@@ -81,4 +78,7 @@ class Producer:
         return gross
 
 
+class Selection(Producer):
 
+    def create(self, num):
+        population = [Producer() for i in range(num)]

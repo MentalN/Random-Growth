@@ -93,11 +93,34 @@ class Environment(Producer):
         for i in range(len(self.population)):
             self.population[i].feed(random.randint(0, 100))
 
-    def growth_select(self):
+    def growth_select(self, fittest):
         self.population = sorted(self.population, key=lambda x: x.get_growth(), reverse=True)
+        del self.population[fittest:]
+
+    def regrow_population(self, new):
+        for i in range(new):
+            self.population.append(Producer())
 
 
 env1 = Environment(5)
 env1.give_resources_all()
-env1.growth_select()
-print(env1.population)
+for i in range(len(env1.population)):
+    print(env1.population[i].growth, "[growth:", env1.population[i].get_growth(), "]")
+
+env1.growth_select(2)
+print("_______________________SORT_______________________")
+
+for j in range(len(env1.population)):
+    print(env1.population[j].growth, "[growth:", env1.population[j].get_growth(), "]")
+
+env1.regrow_population(3)
+env1.give_resources_all()
+
+for k in range(len(env1.population)):
+    print(env1.population[k].growth, "[growth:", env1.population[k].get_growth(), "]")
+
+env1.growth_select(2)
+print("_______________________SORT_______________________")
+
+for z in range(len(env1.population)):
+    print(env1.population[z].growth, "[growth:", env1.population[z].get_growth(), "]")

@@ -78,7 +78,11 @@ class Producer:
         return gross
 
 
-class Selection(Producer):
+class Environment(Producer):
 
-    def create(self, num):
-        population = [Producer() for i in range(num)]
+    def __init__(self, num_p):
+        Producer.__init__(self)
+        self.population = [Producer() for i in range(num_p)]
+
+
+

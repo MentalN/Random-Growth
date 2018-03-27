@@ -31,7 +31,7 @@ class Producer:
         self.growth.append(y)
 
     def phenotype_3(self, x):
-        y = x*x*x
+        y = x*x*-x
         self.growth.append(y)
 
     def phenotype_4(self, x):
@@ -64,7 +64,7 @@ class Producer:
                   9: phenotype_9}
 
 #   input
-    def input(self, someNum):
+    def feed(self, someNum):
         for i in range(len(self.phenotypes)):
             if self.geneticCode[i] is True:
                 self.phenotypes[i](self, someNum)
@@ -84,5 +84,20 @@ class Environment(Producer):
         Producer.__init__(self)
         self.population = [Producer() for i in range(num_p)]
 
+    def give_resources_all(self):
+        r = random.randint(0, 100)
+        for i in range(len(self.population)):
+            self.population[i].feed(r)
+
+    def give_resources_each(self):
+        for i in range(len(self.population)):
+            self.population[i].feed(random.randint(0, 100))
+
+    def growth_select(self):
+        self.population = sorted(self.population, key=lambda x: x.get_growth(), reverse=True)
 
 
+env1 = Environment(5)
+env1.give_resources_all()
+env1.growth_select()
+print(env1.population)

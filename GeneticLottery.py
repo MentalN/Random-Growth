@@ -139,6 +139,7 @@ class Environment(Producer):
         self.show = switch
 
 
+#   Test case 1
 env1 = Environment(10)
 env1.toggle_show(True)
-env1.generations_fair(5, 2)
+env1.generations_fair(10, 2)

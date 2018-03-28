@@ -6,8 +6,11 @@ import random
 
 
 class Producer:
+    counter = 0
 
     def __init__(self):
+        self.numObject = Producer.counter
+        Producer.counter += 1
         self.geneticCode = []
         self.growth = []
         for i in range(10):
@@ -31,7 +34,7 @@ class Producer:
         self.growth.append(y)
 
     def phenotype_3(self, x):
-        y = x*x*-x
+        y = x*-x
         self.growth.append(y)
 
     def phenotype_4(self, x):
@@ -79,6 +82,7 @@ class Producer:
 
 
 class Environment(Producer):
+    show = False
 
     def __init__(self, num_p):
         Producer.__init__(self)
@@ -101,26 +105,40 @@ class Environment(Producer):
         for i in range(new):
             self.population.append(Producer())
 
+    def generations_fair(self, genNum, fittest):
+        regrow = len(self.population) - fittest
+        for i in range(genNum):
+            self.give_resources_all()
+            if self.show is True:
+                print("====================== Generation[", i, "] ======================")
+                for j in range(len(self.population)):
+                    print("num:", self.population[j].numObject, "[growth:", self.population[j].get_growth(), "]")
+            self.growth_select(fittest)
+            if self.show is True:
+                print("====================== Generation[", i, "]:Fittest Survivors ======================")
+                for k in range(len(self.population)):
+                    print("num:", self.population[k].numObject, "[growth:", self.population[k].get_growth(), "]")
+            self.regrow_population(regrow)
 
-env1 = Environment(5)
-env1.give_resources_all()
-for i in range(len(env1.population)):
-    print(env1.population[i].growth, "[growth:", env1.population[i].get_growth(), "]")
+    def generations_unfair(self, genNum, fittest):
+        regrow = len(self.population) - fittest
+        for i in range(genNum):
+            self.give_resources_each()
+            if self.show is True:
+                print("====================== Generation[", i, "] ======================")
+                for j in range(len(self.population)):
+                    print("num:", self.population[j].numObject, "[growth:", self.population[j].get_growth(), "]")
+            self.growth_select(fittest)
+            if self.show is True:
+                print("====================== Generation[", i, "]:Fittest Survivors ======================")
+                for k in range(len(self.population)):
+                    print("num:", self.population[k].numObject, "[growth:", self.population[k].get_growth(), "]")
+            self.regrow_population(regrow)
 
-env1.growth_select(2)
-print("_______________________SORT_______________________")
+    def toggle_show(self, switch):
+        self.show = switch
 
-for j in range(len(env1.population)):
-    print(env1.population[j].growth, "[growth:", env1.population[j].get_growth(), "]")
 
-env1.regrow_population(3)
-env1.give_resources_all()
-
-for k in range(len(env1.population)):
-    print(env1.population[k].growth, "[growth:", env1.population[k].get_growth(), "]")
-
-env1.growth_select(2)
-print("_______________________SORT_______________________")
-
-for z in range(len(env1.population)):
-    print(env1.population[z].growth, "[growth:", env1.population[z].get_growth(), "]")
+env1 = Environment(10)
+env1.toggle_show(True)
+env1.generations_fair(5, 2)
